@@ -1,0 +1,2 @@
+class SchedulePrice < ApplicationRecord
+end

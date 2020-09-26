@@ -1,0 +1,2 @@
+class SpecialFacility < ApplicationRecord
+end
