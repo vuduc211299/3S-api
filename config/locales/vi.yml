@@ -1,0 +1,14 @@
+vi:
+  messages:
+    warning:
+      activate_account: "Kiểm tra email của bạn để kích hoạt tài khoản"
+    errors:
+      incorrect_password: "Email hoặc mật khẩu không đúng"
+    success:
+      login: "Đăng nhập thành công"
+  user_mailer:
+    account_activation:
+      mail_subject: "Kích hoạt tài khoản 3S"
+      title: "Email kích hoạt tài khoản"
+      description: "Hãy ấn link phía dưới để kích hoạt tài khoản"
+      link_des: "Link kích hoạt"
