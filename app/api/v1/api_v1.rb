@@ -4,5 +4,4 @@ class ApiV1 < Grape::API
   version "v1", using: :path
 
   mount AuthApi
-  mount UserApi
 end

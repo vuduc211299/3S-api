@@ -2,40 +2,37 @@ class AuthApi < ApiV1
   namespace :auth do
     desc "Sign up"
     params do
-      requires :name, type: String, message: I18n.t("messages.errors.required")
-      requires :email, type: String, message: I18n.t("messages.errors.required")
-      requires :phone, type: String, message: I18n.t("messages.errors.required")
-      requires :password, type: String, message: I18n.t("messages.errors.required")
-      requires :password_confirmation, type: String, same_as: :password, message: I18n.t("messages.errors.required")
+      requires :name, type: String, message: I18n.t("errors.required")
+      requires :email, type: String, message: I18n.t("errors.required")
+      requires :phone, type: String, message: I18n.t("errors.required")
+      requires :password, type: String, message: I18n.t("errors.required")
+      requires :password_confirmation, type: String, same_as: :password, message: I18n.t("errors.required")
     end
     post "/signup" do
       data = valid_params(params, User::SIGN_UP_PARAMS)
       user = User.create data
       if user.valid?
-        user.send_activation_email
-        return render_success_response(:ok, MessageFormat, {user: user}, I18n.t("messages.warning.activate_account"))
+        token = encode_token({user_id: user.id})
+        set_cookie token
+        return render_success_response(:ok, AuthFormat, {token: token, user: user}, I18n.t("success.signup"))
+      else
+        error!(user.errors.full_messages[0], :bad_request)
       end
-
-      error!(user.errors.full_messages[0], :bad_request)
     end
 
     desc "Sign in"
     params do
-      requires :email, type: String, message: I18n.t("messages.errors.required")
-      requires :password, type: String, message: I18n.t("messages.errors.required")
+      requires :email, type: String, message: I18n.t("errors.required")
+      requires :password, type: String, message: I18n.t("errors.required")
     end
     post "/signin" do
       @user = get_user_by_email
-      unless @user.activated?
-        return render_success_response(:ok, MessageFormat, {user: @user}, I18n.t("messages.warning.activate_account"))
-      end
-
       if @user&.authenticate params[:password]
         token = encode_token({user_id: @user.id})
         set_cookie token
-        return render_success_response(:ok, AuthFormat, {token: token, user: @user}, I18n.t("messages.success.login"))
+        return render_success_response(:ok, AuthFormat, {token: token, user: @user}, I18n.t("success.login"))
       else
-        error!(I18n.t("messages.errors.incorrect_password"), :bad_request)
+        error!(I18n.t("errors.incorrect_password"), :bad_request)
       end
     end
   end
