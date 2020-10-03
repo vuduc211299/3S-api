@@ -1,2 +1,0 @@
-class CommonFacility < ApplicationRecord
-end

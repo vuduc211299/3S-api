@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_09_28_082421) do
+ActiveRecord::Schema.define(version: 2020_10_03_101909) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -24,25 +24,17 @@ ActiveRecord::Schema.define(version: 2020_09_28_082421) do
     t.index ["user_id"], name: "index_bookings_on_user_id"
   end
 
-  create_table "common_facilities", force: :cascade do |t|
-    t.boolean "wifi"
-    t.boolean "tv"
-    t.boolean "fan"
-    t.boolean "air_condition"
-    t.boolean "fridge"
-    t.boolean "work_desk"
-    t.boolean "sofa"
-    t.boolean "washing_machine"
-    t.bigint "place_id", null: false
-    t.index ["place_id"], name: "index_common_facilities_on_place_id"
-  end
-
   create_table "coupons", force: :cascade do |t|
     t.string "code_name"
     t.datetime "start_date"
     t.datetime "expire_date"
     t.bigint "place_id", null: false
+    t.float "discount"
     t.index ["place_id"], name: "index_coupons_on_place_id"
+  end
+
+  create_table "facilities", force: :cascade do |t|
+    t.string "name"
   end
 
   create_table "favorites", force: :cascade do |t|
@@ -58,15 +50,6 @@ ActiveRecord::Schema.define(version: 2020_09_28_082421) do
     t.index ["bookings_id"], name: "index_history_bookings_on_bookings_id"
   end
 
-  create_table "locations", force: :cascade do |t|
-    t.text "district"
-    t.text "town"
-    t.text "road"
-    t.text "home_number"
-    t.bigint "place_id", null: false
-    t.index ["place_id"], name: "index_locations_on_place_id"
-  end
-
   create_table "notifications", force: :cascade do |t|
     t.text "content"
     t.boolean "viewed"
@@ -80,19 +63,29 @@ ActiveRecord::Schema.define(version: 2020_09_28_082421) do
     t.index ["place_id"], name: "index_overviews_on_place_id"
   end
 
+  create_table "place_facilities", force: :cascade do |t|
+    t.bigint "place_id", null: false
+    t.bigint "facility_id", null: false
+    t.index ["facility_id"], name: "index_place_facilities_on_facility_id"
+    t.index ["place_id"], name: "index_place_facilities_on_place_id"
+  end
+
   create_table "places", force: :cascade do |t|
     t.string "name"
     t.string "details"
     t.bigint "user_id", null: false
+    t.integer "city"
+    t.integer "place_type"
+    t.text "address"
     t.index ["user_id"], name: "index_places_on_user_id"
   end
 
   create_table "policies", force: :cascade do |t|
     t.text "currency"
     t.integer "max_num_of_people"
-    t.integer "min_rental_day"
-    t.integer "max_rental_day"
+    t.integer "rental_day"
     t.bigint "place_id", null: false
+    t.integer "cancel_policy"
     t.index ["place_id"], name: "index_policies_on_place_id"
   end
 
@@ -118,6 +111,10 @@ ActiveRecord::Schema.define(version: 2020_09_28_082421) do
   create_table "rules", force: :cascade do |t|
     t.text "special_rules"
     t.bigint "place_id", null: false
+    t.integer "smoking"
+    t.integer "pet"
+    t.integer "cooking"
+    t.integer "party"
     t.index ["place_id"], name: "index_rules_on_place_id"
   end
 
@@ -127,15 +124,6 @@ ActiveRecord::Schema.define(version: 2020_09_28_082421) do
     t.integer "cleaning_price"
     t.bigint "place_id", null: false
     t.index ["place_id"], name: "index_schedule_prices_on_place_id"
-  end
-
-  create_table "special_facilities", force: :cascade do |t|
-    t.boolean "balcony"
-    t.boolean "karaoke"
-    t.boolean "bbq_space"
-    t.boolean "swimming_pool"
-    t.bigint "place_id", null: false
-    t.index ["place_id"], name: "index_special_facilities_on_place_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -155,19 +143,20 @@ ActiveRecord::Schema.define(version: 2020_09_28_082421) do
     t.datetime "activated_at"
     t.string "address"
     t.integer "gender"
+    t.boolean "admin"
     t.index ["email"], name: "index_users_on_email", unique: true
   end
 
   add_foreign_key "bookings", "places"
   add_foreign_key "bookings", "users"
-  add_foreign_key "common_facilities", "places"
   add_foreign_key "coupons", "places"
   add_foreign_key "favorites", "places"
   add_foreign_key "favorites", "users"
   add_foreign_key "history_bookings", "bookings", column: "bookings_id"
-  add_foreign_key "locations", "places"
   add_foreign_key "notifications", "users"
   add_foreign_key "overviews", "places"
+  add_foreign_key "place_facilities", "facilities"
+  add_foreign_key "place_facilities", "places"
   add_foreign_key "places", "users"
   add_foreign_key "policies", "places"
   add_foreign_key "ratings", "places"
@@ -175,5 +164,4 @@ ActiveRecord::Schema.define(version: 2020_09_28_082421) do
   add_foreign_key "rooms", "places"
   add_foreign_key "rules", "places"
   add_foreign_key "schedule_prices", "places"
-  add_foreign_key "special_facilities", "places"
 end
