@@ -10,6 +10,8 @@ class User < ApplicationRecord
   has_many :notifications, dependent: :destroy
   has_many :favorites, dependent: :destroy
 
+  enum gender: {male: 1, female: 2, other: 3}
+
   attr_accessor :activation_token
 
   validates :name, presence: true,
@@ -28,7 +30,7 @@ class User < ApplicationRecord
   validates :avatar, presence: true,
     allow_nil: true
   validates :gender, presence: true,
-    allow_nil: true
+    allow_nil: true, inclusion: {in: genders.keys}
 
   before_create :create_activation_digest
   before_save :downcase_email
