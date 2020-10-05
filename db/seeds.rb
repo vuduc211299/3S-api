@@ -48,8 +48,15 @@ Facility.create!(name: "Fridge/ Freezer")
 Facility.create!(name: "Balcony")
 Facility.create!(name: "Sofa")
 
-#Create place
+#Create coupon
+5.times do |n|
+  Coupon.create!(code_name: Faker::Code.asin,
+                  start_date: Time.zone.now,
+                  expire_date: Time.zone.now + 5.days,
+                  discount: Faker::Number.between(from: 0, to: 100))
+end
 
+#Create place
 users = User.order(:created_at).take(7)
 cities = [1, 2, 3, 4, 5, 6, 7, 8]
 place_types = [1, 2, 3, 4, 5, 6]
@@ -57,7 +64,6 @@ facilities = Facility.all.ids.sample(5)
 currencies = [1, 2, 3]
 cancel_policies = [1, 2, 3]
 positive_number = Faker::Number.between(from: 1, to: 10)
-rental_day = Faker::Number.between(from: 1, to: 50)
 
 10.times do |n|
   name = Faker::Name.name
@@ -69,8 +75,7 @@ rental_day = Faker::Number.between(from: 1, to: 50)
                {image: "image1"}, {image: "image1"},
                {image: "image1"}, {image: "image1"},
                {image: "image1"}, {image: "image1"}]
-  coupons_attributes = [{code_name: "JOY_3S", discount: 15, start_date: Time.zone.now, expire_date: Time.zone.now + 10.days}]
-  policy_attributes = {currency: currencies.sample, cancel_policy: cancel_policies.sample, max_num_of_people: positive_number, rental_day: rental_day}
+  policy_attributes = {currency: currencies.sample, cancel_policy: cancel_policies.sample, max_num_of_people: positive_number}
   rule_attributes = {special_rules: Faker::Lorem.sentence(word_count: 50), smoking: 1, pet: 1, cooking: 2, party: 3}
   room_attributes = {square: Faker::Number.number(digits: 3),
                     num_of_bedroom: positive_number,
@@ -89,7 +94,6 @@ rental_day = Faker::Number.between(from: 1, to: 50)
     place_type: place_type,
     address: address,
     overviews_attributes: overviews_attributes,
-    coupons_attributes: coupons_attributes,
     policy_attributes: policy_attributes,
     rule_attributes: rule_attributes,
     room_attributes: room_attributes,

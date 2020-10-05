@@ -6,6 +6,7 @@ en:
       incorrect_password: "Email or password are not correct"
     success:
       login: "Login success"
+      booking: "Booking success"
   user_mailer:
     account_activation:
       mail_subject: "3S Account activation"

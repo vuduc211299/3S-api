@@ -24,9 +24,28 @@ module AuthHelper
     end
   end
 
+  def current_user
+    return unless decode_token
+
+    user_id = decode_token[0]["user_id"]
+    user = User.find_by id: user_id
+    error!(I18n.t("request.login"), :unauthorized) unless user
+    user
+  end
+
   def auth_header
     token = request.headers["Authorization"] || cookies[:token]
     error!(I18n.t("errors.auth_token_not_found"), :unauthorized) unless token
     token
+  end
+
+  def authenticated
+    error!(I18n.t("request.login"), :unauthorized) unless logged_in?
+  end
+
+  private
+
+  def logged_in?
+    current_user.present?
   end
 end

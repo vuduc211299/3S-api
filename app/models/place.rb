@@ -3,7 +3,6 @@ class Place < ApplicationRecord
   enum place_type: {homestay: 1, villa: 2, apartment: 3, penhouse: 4, hostel: 5, motel: 6}
 
   belongs_to :user
-  has_many :coupons, dependent: :destroy
   has_many :overviews, inverse_of: :place, dependent: :destroy
   validates :overviews, length: {minimum: Settings.validations.place.minimum_of_overviews}
   has_many :bookings, dependent: :destroy
@@ -14,9 +13,11 @@ class Place < ApplicationRecord
   has_one :room, inverse_of: :place, dependent: :destroy
   has_one :schedule_price, inverse_of: :place, dependent: :destroy
 
+  delegate :weekend_price, to: :schedule_price
+  delegate :normal_day_price, to: :schedule_price
+
   accepts_nested_attributes_for :overviews, allow_destroy: true
   accepts_nested_attributes_for :place_facilities, allow_destroy: true
-  accepts_nested_attributes_for :coupons, allow_destroy: true
   accepts_nested_attributes_for :policy, allow_destroy: true
   accepts_nested_attributes_for :rule, allow_destroy: true
   accepts_nested_attributes_for :room, allow_destroy: true
@@ -29,4 +30,8 @@ class Place < ApplicationRecord
     length: {maximum: Settings.validations.place.max_length_of_details}
   validates :city, presence: true, inclusion: {in: cities.keys}
   validates :place_type, presence: true, inclusion: {in: place_types.keys}
+
+  def maximum_rental_people
+    policy.max_num_of_people
+  end
 end
