@@ -22,6 +22,7 @@ gem "jbuilder", "~> 2.7"
 gem "jwt"
 gem "paypal-sdk-rest"
 gem "puma", "~> 4.1"
+gem "sidekiq"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
 # gem 'rack-cors'
