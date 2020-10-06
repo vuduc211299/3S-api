@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_10_03_101909) do
+ActiveRecord::Schema.define(version: 2020_10_05_071755) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -20,6 +20,11 @@ ActiveRecord::Schema.define(version: 2020_10_03_101909) do
     t.datetime "end_date"
     t.bigint "user_id", null: false
     t.bigint "place_id", null: false
+    t.integer "status"
+    t.integer "payment_gateway"
+    t.integer "num_of_people"
+    t.float "price"
+    t.string "coupon_code"
     t.index ["place_id"], name: "index_bookings_on_place_id"
     t.index ["user_id"], name: "index_bookings_on_user_id"
   end
@@ -28,9 +33,7 @@ ActiveRecord::Schema.define(version: 2020_10_03_101909) do
     t.string "code_name"
     t.datetime "start_date"
     t.datetime "expire_date"
-    t.bigint "place_id", null: false
     t.float "discount"
-    t.index ["place_id"], name: "index_coupons_on_place_id"
   end
 
   create_table "facilities", force: :cascade do |t|
@@ -46,8 +49,9 @@ ActiveRecord::Schema.define(version: 2020_10_03_101909) do
 
   create_table "history_bookings", force: :cascade do |t|
     t.datetime "modify_datetime"
-    t.bigint "bookings_id", null: false
-    t.index ["bookings_id"], name: "index_history_bookings_on_bookings_id"
+    t.bigint "booking_id", null: false
+    t.integer "status"
+    t.index ["booking_id"], name: "index_history_bookings_on_booking_id"
   end
 
   create_table "notifications", force: :cascade do |t|
@@ -81,9 +85,8 @@ ActiveRecord::Schema.define(version: 2020_10_03_101909) do
   end
 
   create_table "policies", force: :cascade do |t|
-    t.text "currency"
+    t.integer "currency"
     t.integer "max_num_of_people"
-    t.integer "rental_day"
     t.bigint "place_id", null: false
     t.integer "cancel_policy"
     t.index ["place_id"], name: "index_policies_on_place_id"
@@ -149,10 +152,9 @@ ActiveRecord::Schema.define(version: 2020_10_03_101909) do
 
   add_foreign_key "bookings", "places"
   add_foreign_key "bookings", "users"
-  add_foreign_key "coupons", "places"
   add_foreign_key "favorites", "places"
   add_foreign_key "favorites", "users"
-  add_foreign_key "history_bookings", "bookings", column: "bookings_id"
+  add_foreign_key "history_bookings", "bookings"
   add_foreign_key "notifications", "users"
   add_foreign_key "overviews", "places"
   add_foreign_key "place_facilities", "facilities"

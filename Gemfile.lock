@@ -171,6 +171,9 @@ GEM
     parallel (1.19.2)
     parser (2.7.1.5)
       ast (~> 2.4.1)
+    paypal-sdk-rest (1.7.4)
+      multi_json (~> 1.0)
+      xml-simple
     pg (1.2.3)
     pry (0.13.1)
       coderay (~> 1.1)
@@ -267,6 +270,7 @@ GEM
     websocket-driver (0.7.3)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
+    xml-simple (1.1.5)
     zeitwerk (2.4.0)
 
 PLATFORMS
@@ -286,6 +290,7 @@ DEPENDENCIES
   jbuilder (~> 2.7)
   jwt
   listen (~> 3.2)
+  paypal-sdk-rest
   pg
   pry-rails
   puma (~> 4.1)

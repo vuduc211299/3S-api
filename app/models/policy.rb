@@ -2,7 +2,7 @@ class Policy < ApplicationRecord
   belongs_to :place, inverse_of: :policy
   validates :place, presence: true
 
-  enum currency: {VND: 1, USD: 2, YEN: 3}
+  enum currency: {vnd: 1, usd: 2, yen: 3}
   enum cancel_policy: {normal: 1, flexible: 2, strict: 3}
 
   validates :currency, presence: true, inclusion: {in: currencies.keys}
@@ -10,8 +10,4 @@ class Policy < ApplicationRecord
   validates :max_num_of_people, presence: true,
     numericality: {only_integer: true,
                    greater_than_or_equal_to: Settings.validations.place.min_people}
-  validates :rental_day, presence: true,
-    numericality: {only_integer: true,
-                   greater_than_or_equal_to: Settings.validations.place.min_rental_day,
-                   less_than_or_equal_to: Settings.validations.place.max_rental_day}
 end

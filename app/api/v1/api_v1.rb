@@ -5,4 +5,5 @@ class ApiV1 < Grape::API
 
   mount AuthApi
   mount UserApi
+  mount BookingApi
 end

@@ -1,9 +1,10 @@
 class Coupon < ApplicationRecord
-  belongs_to :place, inverse_of: :coupons
-  validates :place, presence: true
-
   validates :code_name, :start_date, :expire_date, :discount, presence: true
   validate :expire_date_after_start_date
+
+  def useable?
+    expire_date.to_i >= Time.zone.now
+  end
 
   private
 

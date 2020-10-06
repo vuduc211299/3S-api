@@ -20,6 +20,7 @@ gem "grape_on_rails_routes"
 gem "i18n"
 gem "jbuilder", "~> 2.7"
 gem "jwt"
+gem "paypal-sdk-rest"
 gem "puma", "~> 4.1"
 
 # Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
