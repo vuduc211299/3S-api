@@ -19,3 +19,7 @@ validations:
     min_people: 1
     max_length: 500
 expire_token_time: 1
+enum:
+  booking:
+    status:
+      incomplete: 4
