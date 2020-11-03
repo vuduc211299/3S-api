@@ -2,8 +2,6 @@ class ExpireBookingExecuterJob < ApplicationJob
   queue_as :default
 
   def perform item
-    if item.pending?
-      item.update status: Settings.enum.booking.status.incomplete
-    end
+    item.update status: Settings.enum.booking.status.incomplete if item.pending?
   end
 end

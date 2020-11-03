@@ -39,6 +39,10 @@ module AuthHelper
     token
   end
 
+  def admin_authenticated
+    error!("Admin Unauthorized", :unauthorized) unless current_user.admin?
+  end
+
   def authenticated
     error!(I18n.t("request.login"), :unauthorized) unless logged_in?
   end

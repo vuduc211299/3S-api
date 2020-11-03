@@ -7,6 +7,9 @@ en:
     success:
       login: "Login success"
       booking: "Booking success"
+      place:
+        create: "Create place successfully"
+        requested: "Place'status has been updated"
   user_mailer:
     account_activation:
       mail_subject: "3S Account activation"
