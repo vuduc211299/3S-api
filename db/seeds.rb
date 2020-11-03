@@ -93,6 +93,7 @@ positive_number = Faker::Number.between(from: 1, to: 10)
     city: city,
     place_type: place_type,
     address: address,
+    accepted: false,
     overviews_attributes: overviews_attributes,
     policy_attributes: policy_attributes,
     rule_attributes: rule_attributes,
