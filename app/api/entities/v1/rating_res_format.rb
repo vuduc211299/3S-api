@@ -3,5 +3,5 @@ class RatingResFormat < Grape::Entity
 
   expose :message do |_ratings, options|
     options[:message]
-  end 
+  end
 end

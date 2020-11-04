@@ -3,6 +3,7 @@ class User < ApplicationRecord
   SIGN_UP_PARAMS = %i(name email password password_confirmation \
     gender address birthday avatar phone).freeze
   LOGIN_PARAMS = %i(email password).freeze
+  UPDATE_PROFILE_PARAMS = %i(name phone birthday avatar address gender).freeze
 
   has_many :places, dependent: :destroy
   has_many :bookings, dependent: :destroy
