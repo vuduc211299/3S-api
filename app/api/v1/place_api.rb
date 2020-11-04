@@ -59,21 +59,63 @@ class PlaceApi < ApiV1
       error!(place.errors.full_messages[0], :bad_request)
     end
 
+    get "/:place_id" do
+      place = Place.find_by id: params[:place_id]
+
+      return render_success_response(:ok, PlaceResFormat, {data: place}, message: I18n.t("messages.success.place.get")) if place
+
+      error!("Place not found", 404)
+    end
+
     desc "Admin accept or deny owner's request"
 
     params do
-      requires :id, :accepted, type: String
+      requires :accepted, type: String
     end
 
-    patch "/check" do
+    patch "/:place_id/check" do
       admin_authenticated
 
-      place = Place.find_by id: params[:id]
+      place = Place.find_by id: params[:place_id]
       result = place.update accepted: params[:accepted]
 
       return render_success_response(:ok, PlaceResFormat, {data: place}, I18n.t("messages.success.place.requested")) if result
 
       error!(place.errors.full_messages[0], :bad_request)
+    end
+
+    desc "Rate a place"
+
+    params do
+      requires :place_id
+      optional :score, type: Integer, values: [1, 2, 3, 4, 5]
+      optional :comment, type: String
+    end
+
+    post "/:place_id/rating/new" do
+      data = valid_params params, Rating::RATING_PARAMS
+      data[:place_id] = params[:place_id]
+      data[:score] = params[:score]
+      data[:comment] = params[:comment]
+
+      exist = current_user.ratings.find_by(place_id: params[:place_id]).present?
+      error!("You've already rated this place", :bad_request) if exist
+      
+      rating = current_user.ratings.build data
+
+      if rating.valid?
+        rating.save
+
+        return render_success_response(:ok, RatingResFormat, {data: rating}, I18n.t("messages.success.rating.create"))
+      end
+
+      error!(rating.errors.full_messages[0], :bad_request)
+    end
+
+    get "/:place_id/ratings" do
+      ratings = Place.find_by(id: params[:place_id]).ratings
+
+      return render_success_response(:ok, RatingResFormat, {data: ratings}, I18n.t("messages.success.rating.create"))
     end
   end
 end
