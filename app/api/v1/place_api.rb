@@ -62,7 +62,9 @@ class PlaceApi < ApiV1
     get "/:place_id" do
       place = Place.find_by id: params[:place_id]
 
-      return render_success_response(:ok, PlaceResFormat, {data: place}, message: I18n.t("messages.success.place.get")) if place
+      if place
+        return render_success_response(:ok, PlaceResFormat, {data: place}, message: I18n.t("messages.success.place.get"))
+      end
 
       error!("Place not found", 404)
     end
@@ -79,7 +81,9 @@ class PlaceApi < ApiV1
       place = Place.find_by id: params[:place_id]
       result = place.update accepted: params[:accepted]
 
-      return render_success_response(:ok, PlaceResFormat, {data: place}, I18n.t("messages.success.place.requested")) if result
+      if result
+        return render_success_response(:ok, PlaceResFormat, {data: place}, I18n.t("messages.success.place.requested"))
+      end
 
       error!(place.errors.full_messages[0], :bad_request)
     end
@@ -100,7 +104,7 @@ class PlaceApi < ApiV1
 
       exist = current_user.ratings.find_by(place_id: params[:place_id]).present?
       error!("You've already rated this place", :bad_request) if exist
-      
+
       rating = current_user.ratings.build data
 
       if rating.valid?
