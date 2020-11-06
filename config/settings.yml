@@ -5,7 +5,9 @@ validations:
       max_length: 255
     password:
       min_length: 6
+      max_length: 50
     name:
+      min_length: 6
       max_length: 50
     address:
       max_length: 100

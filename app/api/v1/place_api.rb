@@ -62,9 +62,7 @@ class PlaceApi < ApiV1
     get "/:place_id" do
       place = Place.find_by id: params[:place_id]
 
-      if place
-        return render_success_response(:ok, PlaceResFormat, {data: place}, message: I18n.t("messages.success.place.get"))
-      end
+      return render_success_response(:ok, PlaceResFormat, {data: place}, message: "Get place successfully") if place
 
       error!("Place not found", 404)
     end
