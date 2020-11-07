@@ -24,7 +24,7 @@ class BookmarkApi < ApiV1
       if bookmark.valid?
         bookmark.save
 
-        return render_success_response(:ok, BookmarkResFormat, {data: bookmark}, I18n.t("messages.success.bookmark.create"))
+        return render_success_response(:ok, BookmarkResFormat, {data: bookmark}, "Bookmark success")
       end
 
       error!(bookmark.errors.full_messages[0], :bad_request)
@@ -41,14 +41,12 @@ class BookmarkApi < ApiV1
     desc "remove bookmark"
 
     delete "/remove" do
-      data = valid_params params, Favorite::BOOKMARK_PARAMS
-
       bookmark = current_user.favorites.find_by place_id: params[:place_id]
 
       if bookmark
         bookmark.destroy
 
-        return render_success_response(:ok, BookmarkResFormat, {data: bookmark}, I18n.t("messages.success.bookmark.remove"))
+        return render_success_response(:ok, BookmarkResFormat, {data: bookmark}, "Bookmark has removed")
       end
 
       error!("Bookmark not found !", :bad_request)
