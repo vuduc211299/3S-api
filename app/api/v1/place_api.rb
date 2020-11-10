@@ -59,12 +59,28 @@ class PlaceApi < ApiV1
       error!(place.errors.full_messages[0], :bad_request)
     end
 
+    desc "get place by id"
+
     get "/:place_id" do
       place = Place.find_by id: params[:place_id]
 
       return render_success_response(:ok, PlaceResFormat, {data: place}, message: "Get place successfully") if place
 
       error!("Place not found", 404)
+    end
+
+    desc "get place by city"
+
+    params do
+      requires :city, type: Symbol, values: [:hanoi, :hcm, :danang, :nhatrang, :dalat, :quangninh, :hoian, :vungtau]
+    end
+
+    get "/city/:city" do
+      places = Place.where city: params[:city]
+
+      return render_success_response(:ok, PlaceResFormat, {data: places}, message: "Get place successfully") if places
+
+      error!(places.errors.full_messages[0], :bad_request)
     end
 
     desc "Admin accept or deny owner's request"
