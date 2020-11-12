@@ -1,9 +1,5 @@
 class PlaceApi < ApiV1
   namespace :place do
-    before do
-      authenticated
-    end
-
     desc "Add a place"
     params do
       requires :name, :details, :address, type: String, message: I18n.t("messages.errors.required")
@@ -33,6 +29,8 @@ class PlaceApi < ApiV1
       requires :place_facilities_attributes, type: Array
     end
     post "/new" do
+      authenticated
+
       data = valid_params params, Place::PLACE_PARAMS
       data[:user_id] = current_user.id
       data[:name] = params[:name]
@@ -90,6 +88,7 @@ class PlaceApi < ApiV1
     end
 
     patch "/:place_id/check" do
+      authenticated
       admin_authenticated
 
       place = Place.find_by id: params[:place_id]
@@ -111,6 +110,8 @@ class PlaceApi < ApiV1
     end
 
     post "/:place_id/rating/new" do
+      authenticated
+
       data = valid_params params, Rating::RATING_PARAMS
       data[:place_id] = params[:place_id]
       data[:score] = params[:score]
