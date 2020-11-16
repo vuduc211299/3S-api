@@ -12,7 +12,8 @@ class UserApi < ApiV1
       optional :birthday, type: DateTime, allow_blank: false
       optional :avatar, type: String, allow_blank: false
       optional :address, type: String, allow_blank: false
-      optional :gender, type: Integer, allow_blank: false
+      optional :gender, type: Symbol, allow_blank: false,
+        values: [:male, :female, :other]
     end
     patch "/update" do
       data = valid_params params, User::UPDATE_PROFILE_PARAMS
