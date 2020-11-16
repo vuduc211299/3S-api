@@ -28,3 +28,5 @@
 .env
 /test/*
 /public/*
+.env
+k8s/base/secret.yml

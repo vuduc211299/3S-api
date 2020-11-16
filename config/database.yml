@@ -46,7 +46,7 @@ test:
   database: api_3S_test
   host: localhost
   port: 5432
-  username: <%= ENV['DATABASE_USERNAME'] %> 
+  username: <%= ENV['DATABASE_USERNAME'] %>
   password: <%= ENV['DATABASE_PASSWORD'] %>
 
 # As with config/credentials.yml, you never want to store sensitive information,
@@ -70,6 +70,7 @@ test:
 #
 production:
   <<: *default
-  database: api_3S_production
-  username: api_3S
-  password: <%= ENV['API_3S_DATABASE_PASSWORD'] %>
+  database: api_3s_production
+  host: <%= ENV['DATABASE_HOST'] %>
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
