@@ -283,31 +283,42 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  activesupport (= 6.0.3.3)
   bcrypt (~> 3.1.7)
-  bootsnap (>= 1.4.2)
+  bootsnap (= 1.4.8)
   config
   devise
   dotenv-rails
+  dry-initializer (= 3.0.3)
+  dry-logic (= 1.0.7)
+  dry-schema (= 1.5.4)
+  erubi (= 1.9.0)
   faker
-  grape
-  grape-entity
+  grape (= 1.4.0)
+  grape-entity (= 0.8.1)
   grape_on_rails_routes
   i18n
   jbuilder (~> 2.7)
   jwt
-  listen (~> 3.2)
+  listen (~> 3.2.1)
+  parallel (= 1.19.2)
+  parser (= 2.7.1.5)
   paypal-sdk-rest
   pg
   pry-rails
   puma (~> 4.1)
   rails (~> 6.0.3, >= 6.0.3.3)
   rails_best_practices
-  rubocop
+  regexp_parser (= 1.8.0)
+  rubocop (= 0.92.0)
+  rubocop-ast (= 0.6.0)
   rubocop-rails (~> 2.3.2)
   sidekiq
   spring
   spring-watcher-listen (~> 2.0.0)
+  tzinfo (= 1.2.7)
   tzinfo-data
+  zeitwerk (= 2.4.0)
 
 RUBY VERSION
    ruby 2.7.0p0
