@@ -26,6 +26,9 @@ class AuthApi < ApiV1
     end
     post "/signin" do
       @user = get_user_by_email
+
+      error!(I18n.t("messages.errors.email_not_found"), :bad_request) unless @user
+
       unless @user.activated?
         return render_success_response(:ok, MessageFormat, {user: @user}, I18n.t("messages.warning.activate_account"))
       end
