@@ -103,3 +103,16 @@ positive_number = Faker::Number.between(from: 1, to: 10)
     place_facilities_attributes: place_facilities_attributes
   )}
 end
+
+places = Place.all
+
+places.each do |place|
+  ratings_params = {place_id: place.id, score: rating_score.sample, comment: Faker::Lorem.sentence(word_count: 11)}
+  users.each do |user|
+    if user.id != place.user_id
+      rating = user.ratings.build ratings_params
+
+      rating.save if rating.valid?
+    end
+  end
+end
