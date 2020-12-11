@@ -37,6 +37,7 @@ class PlaceApi < ApiV1
       data[:details] = params[:details]
       data[:city] = params[:city]
       data[:place_type] = params[:place_type]
+      data[:image] = params[:image]
       data[:address] = params[:address]
       data[:overviews_attributes] = params[:overviews_attributes]
       data[:policy_attributes] = params[:policy_attributes]
@@ -51,7 +52,10 @@ class PlaceApi < ApiV1
       if place.valid?
         place.save
 
-        return render_success_response(:ok, PlaceResFormat, {data: place}, I18n.t("messages.success.place.create"))
+        data[:id] = place.id
+        data[:host] = User.find_by id: place.user_id
+
+        return render_success_response(:ok, PlaceResFormat, {data: data}, I18n.t("messages.success.place.create"))
       end
 
       error!(place.errors.full_messages[0], :bad_request)
@@ -67,6 +71,7 @@ class PlaceApi < ApiV1
       result[:id] = place.id
       result[:details] = place.details
       result[:address] = place.address
+      result[:image] = place.image
       result[:place_type] = place.place_type
       result[:host] = User.find_by id: place.user_id
       result[:schedule_price] = place.schedule_price
@@ -103,6 +108,7 @@ class PlaceApi < ApiV1
         result[:name] = place.name
         result[:id] = place.id
         result[:details] = place.details
+        result[:image] = place.image
         result[:host] = User.find_by id: place.user_id
         result[:address] = place.address
         result[:place_type] = place.place_type
