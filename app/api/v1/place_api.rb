@@ -74,18 +74,18 @@ class PlaceApi < ApiV1
       result[:image] = place.image
       result[:place_type] = place.place_type
       result[:host] = User.find_by id: place.user_id
-      result[:schedule_price] = place.schedule_price
-      result[:room] = place.room
-      result[:policy] = place.policy
-      result[:rule] = place.rule
+      result[:overviews_attributes] = place.overviews
+      result[:schedule_price_attributes] = place.schedule_price
+      result[:room_attributes] = place.room
+      result[:policy_attributes] = place.policy
+      result[:rule_attributes] = place.rule
       result[:ratings] = place.ratings
       facility = []
       PlaceFacility.where(place_id: place.id).each do |f|
         facility << Facility.find_by(id: f.facility_id).name
       end
 
-      result[:place_facilities] = facility
-      result[:overviews] = place.overviews
+      result[:place_facilities_attributes] = facility
 
       return render_success_response(:ok, PlaceResFormat, {data: result}, message: "Get place successfully") if place
 
@@ -112,18 +112,17 @@ class PlaceApi < ApiV1
         result[:host] = User.find_by id: place.user_id
         result[:address] = place.address
         result[:place_type] = place.place_type
-        result[:schedule_price] = place.schedule_price
-        result[:room] = place.room
-        result[:policy] = place.policy
-        result[:rule] = place.rule
-        result[:ratings] = place.ratings
         facility = []
         PlaceFacility.where(place_id: place.id).each do |f|
           facility << Facility.find_by(id: f.facility_id).name
         end
-
-        result[:place_facilities] = facility
-        result[:overviews] = place.overviews
+        result[:place_facilities_attributes] = facility
+        result[:schedule_price_attributes] = place.schedule_price
+        result[:room_attributes] = place.room
+        result[:policy_attributes] = place.policy
+        result[:rule_attributes] = place.rule
+        result[:ratings] = place.ratings
+        result[:overviews_attributes] = place.overviews
 
         results << result
       end
