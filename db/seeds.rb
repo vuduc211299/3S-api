@@ -57,18 +57,18 @@ Facility.create!(name: "Sofa")
 end
 
 #Create place
-users = User.order(:created_at).take(7)
-cities = [1, 2, 3, 4, 5, 6, 7, 8]
+users = User.order(:created_at).take(20)
 place_types = [1, 2, 3, 4, 5, 6]
 facilities = Facility.all.ids.sample(5)
 currencies = [1, 2, 3]
 cancel_policies = [1, 2, 3]
+rating_score = [1, 2, 3, 4, 5]
 positive_number = Faker::Number.between(from: 1, to: 10)
 
-10.times do |n|
+8.times do |n|
   name = Faker::Name.name
   details = Faker::Lorem.sentence(word_count: 10)
-  city = cities.sample
+  city = n + 1
   place_type = place_types.sample
   address = Faker::Address.street_address
   overviews_attributes = [{image: "image1"}, {image: "image1"},
@@ -85,6 +85,7 @@ positive_number = Faker::Number.between(from: 1, to: 10)
   schedule_price_attributes = {normal_day_price: Faker::Number.number(digits: 2),
                               weekend_price: Faker::Number.number(digits: 2),
                               cleaning_price: Faker::Number.number(digits: 2)}
+  ratings_attributes = {score: rating_score.sample, comment: Faker::Lorem.sentence(word_count: 11)}
   place_facilities_attributes = facilities.map {|f| {facility_id: f}}
 
   users.each {|user| user.places.create!(
