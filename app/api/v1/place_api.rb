@@ -1,4 +1,11 @@
 class PlaceApi < ApiV1
+  # helpers do
+  #   params :pagination do
+  #     optional :page, type: Integer
+  #     optional :per_page, type: Integer
+  #   end
+  # end
+
   namespace :place do
     desc "Add a place"
     params do
@@ -92,16 +99,18 @@ class PlaceApi < ApiV1
       error!("Place not found", 404)
     end
 
-    desc "get place by city"
+    desc "get place by city pagination"
 
     params do
       requires :city, type: Symbol, values: [:hanoi, :hcm, :danang, :nhatrang, :dalat, :quangninh, :hoian, :vungtau]
+      requires :page, type: Integer
     end
 
-    get "/city/:city" do
+    get "/city/:city/page/:page" do
       results = []
+      page = params[:page] - 1
 
-      places = Place.where city: params[:city]
+      places = Place.where(city: params[:city]).limit(20).offset(page*20)
 
       places.each do |place|
         result = {}

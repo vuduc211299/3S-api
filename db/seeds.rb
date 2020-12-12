@@ -13,7 +13,7 @@ User.create!(
 )
 
 #Create user
-10.times do |n|
+100.times do |n|
   name = "user#{n+1}"
   email = "user#{n+1}@gmail.com"
   password = "123456"
@@ -57,7 +57,7 @@ Facility.create!(name: "Sofa")
 end
 
 #Create place
-users = User.order(:created_at).take(20)
+users = User.order(:created_at).take(100)
 place_types = [1, 2, 3, 4, 5, 6]
 facilities = Facility.all.ids.sample(5)
 currencies = [1, 2, 3]
@@ -148,7 +148,7 @@ places = Place.all
 
 places.each do |place|
   ratings_params = {place_id: place.id, score: rating_score.sample, comment: Faker::Lorem.sentence(word_count: 11)}
-  users.each do |user|
+  users.take(2).each do |user|
     if user.id != place.user_id
       rating = user.ratings.build ratings_params
 
