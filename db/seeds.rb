@@ -121,9 +121,9 @@ images = ["https://cdn.luxstay.com/rooms/21289/large/room_21289_50_1557240288.jp
                     num_of_bed: positive_number,
                     num_of_bathroom: positive_number,
                     num_of_kitchen: positive_number}
-  schedule_price_attributes = {normal_day_price: Faker::Number.number(digits: 2),
-                              weekend_price: Faker::Number.number(digits: 2),
-                              cleaning_price: Faker::Number.number(digits: 2)}
+  schedule_price_attributes = {normal_day_price: Faker::Number.number(digits: 6),
+                              weekend_price: Faker::Number.number(digits: 7),
+                              cleaning_price: Faker::Number.number(digits: 6)}
   ratings_attributes = {score: rating_score.sample, comment: Faker::Lorem.sentence(word_count: 11)}
   place_facilities_attributes = facilities.map {|f| {facility_id: f}}
 
