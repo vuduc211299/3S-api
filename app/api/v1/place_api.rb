@@ -99,6 +99,20 @@ class PlaceApi < ApiV1
       error!("Place not found", 404)
     end
 
+    desc "get total number of place by city"
+
+    params do
+      requires :city, type: Symbol, values: [:hanoi, :hcm, :danang, :nhatrang, :dalat, :quangninh, :hoian, :vungtau]
+    end
+
+    get "/city/:city/count" do
+      places = Place.where(city: params[:city])
+
+      count = places.count if places
+
+      return render_success_response(:ok, PlaceCountFormat, {data: count}, message: "Get place successfully") if places
+    end
+
     desc "get place by city pagination"
 
     params do
