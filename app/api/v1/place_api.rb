@@ -1,11 +1,4 @@
 class PlaceApi < ApiV1
-  # helpers do
-  #   params :pagination do
-  #     optional :page, type: Integer
-  #     optional :per_page, type: Integer
-  #   end
-  # end
-
   namespace :place do
     desc "Add a place"
     params do
@@ -66,6 +59,45 @@ class PlaceApi < ApiV1
       end
 
       error!(place.errors.full_messages[0], :bad_request)
+    end
+
+    desc "Get place by user_id"
+
+    params do
+      requires :user_id, type: Integer
+    end
+
+    get "/host/:user_id" do
+      places = Place.where(user_id: params[:user_id])
+
+      error!(places.errors.full_messages[0], :bad_request) unless places
+
+      results = []
+      places.each do |place|
+        result = {}
+        result[:name] = place.name
+        result[:id] = place.id
+        result[:details] = place.details
+        result[:address] = place.address
+        result[:image] = place.image
+        result[:place_type] = place.place_type
+        result[:host] = User.find_by id: place.user_id
+        result[:overviews_attributes] = place.overviews
+        result[:schedule_price_attributes] = place.schedule_price
+        result[:room_attributes] = place.room
+        result[:policy_attributes] = place.policy
+        result[:rule_attributes] = place.rule
+        result[:ratings] = place.ratings
+        facility = []
+        PlaceFacility.where(place_id: place.id).each do |f|
+          facility << Facility.find_by(id: f.facility_id).name
+        end
+
+        result[:place_facilities_attributes] = facility
+        results << result
+      end
+
+      return render_success_response(:ok, PlaceResFormat, {data: results}, "success")
     end
 
     desc "get place by id"

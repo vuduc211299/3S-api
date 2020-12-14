@@ -60,5 +60,26 @@ class BookingApi < ApiV1
 
       error!(booking.errors.full_messages[0], :bad_request)
     end
+
+    desc "Get all bookings by host"
+
+    params do
+      requires :id, type: Integer
+    end
+
+    get "/host/:id" do
+      place_id = Place.where(user_id: params[:id]).ids
+      results = []
+
+      place_id.each do |id|
+        booking = Booking.where(place_id: id)
+
+        results.concat(booking)
+      end
+
+      return render_success_response(:ok, BookingResFormat, {data: results}, "success") if results
+
+      error!("error", :bad_request)
+    end
   end
 end
