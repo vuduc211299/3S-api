@@ -191,9 +191,6 @@ class PlaceApi < ApiV1
       data[:score] = params[:score]
       data[:comment] = params[:comment]
 
-      exist = current_user.ratings.find_by(place_id: params[:place_id]).present?
-      error!("You've already rated this place", :bad_request) if exist
-
       rating = current_user.ratings.build data
 
       if rating.valid?
