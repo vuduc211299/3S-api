@@ -129,7 +129,7 @@ images = ["https://cdn.luxstay.com/rooms/21289/large/room_21289_50_1557240288.jp
 
   users.each {|user| user.places.create!(
     name: Faker::Name.name,
-    details: Faker::Lorem.sentence(word_count: 10),
+    details: Faker::Lorem.sentence(word_count: 500),
     city: city,
     image: images.sample,
     place_type: place_type,

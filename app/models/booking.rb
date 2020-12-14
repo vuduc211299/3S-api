@@ -2,7 +2,6 @@ class Booking < ApplicationRecord
   BOOKING_PARAMS = %i(start_date end_date num_of_people place_id).freeze
 
   after_commit :log_history, on: %i(create update)
-  after_create :check_expire_booking
 
   enum status: {pending: 1, paid: 2, canceled: 3, incomplete: 4}
   enum payment_gateway: {paypal: 1}
@@ -44,10 +43,6 @@ class Booking < ApplicationRecord
   end
 
   private
-
-  def check_expire_booking
-    ExpireBookingExecuterJob.set(wait: 1.day).perform_later self
-  end
 
   def maximum_people
     place.maximum_rental_people

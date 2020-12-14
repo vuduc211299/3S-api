@@ -23,5 +23,19 @@ class UserApi < ApiV1
 
       error!(I18n.t("messages.errors.update"), :bad_request)
     end
+
+    desc "Get info user by id"
+
+    params do
+      requires :id, type: Integer
+    end
+
+    get "/user/:id" do
+      user = User.find_by id: params[:id]
+
+      return render_success_response(:ok, UserFormat, user, I18n.t("Request successful")) if user
+
+      error!(I18n.t("Request failed"), :bad_request)
+    end
   end
 end

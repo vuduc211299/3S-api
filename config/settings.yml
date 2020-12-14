@@ -15,7 +15,7 @@ validations:
     minimum_of_overviews: 8
     min_length_of_name: 6
     max_length_of_name: 50
-    max_length_of_details: 200
+    max_length_of_details: 10000
     min_normal_price: 0
     min_weekend_price: 0
     min_people: 1

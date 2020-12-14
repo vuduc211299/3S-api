@@ -32,5 +32,33 @@ class BookingApi < ApiV1
 
       error!(booking.errors.full_messages[0], :bad_request)
     end
+
+    desc "Get booking by user"
+
+    params do
+      requires :id, type: Integer
+    end
+
+    get "/user/:id" do
+      bookings = Booking.where user_id: params[:id]
+
+      return render_success_response(:ok, BookingResFormat, {data: bookings}, "success") if bookings
+
+      error!(booking.errors.full_messages[0], :bad_request)
+    end
+
+    desc "Get booking by place"
+
+    params do
+      requires :id, type: Integer
+    end
+
+    get "/place/:id" do
+      bookings = Booking.where place_id: params[:id]
+
+      return render_success_response(:ok, BookingResFormat, {data: bookings}, "success") if bookings
+
+      error!(booking.errors.full_messages[0], :bad_request)
+    end
   end
 end

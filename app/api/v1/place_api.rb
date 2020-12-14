@@ -124,7 +124,7 @@ class PlaceApi < ApiV1
       results = []
       page = params[:page] - 1
 
-      places = Place.where(city: params[:city]).limit(20).offset(page*20)
+      places = Place.where(city: params[:city]).limit(20).offset(page * 20)
 
       places.each do |place|
         result = {}
@@ -199,7 +199,11 @@ class PlaceApi < ApiV1
       if rating.valid?
         rating.save
 
-        return render_success_response(:ok, RatingResFormat, {data: rating}, I18n.t("messages.success.rating.create"))
+        data[:user_name] = current_user.name
+        data[:user_avatar] = current_user.avatar
+        data[:id] = rating[:id]
+
+        return render_success_response(:ok, RatingResFormat, {data: data}, "success")
       end
 
       error!(rating.errors.full_messages[0], :bad_request)
@@ -207,8 +211,21 @@ class PlaceApi < ApiV1
 
     get "/:place_id/ratings" do
       ratings = Place.find_by(id: params[:place_id]).ratings
+      error!(rating.errors.full_messages[0], :bad_request) unless ratings
 
-      return render_success_response(:ok, RatingResFormat, {data: ratings}, I18n.t("messages.success.rating.create"))
+      results = []
+      ratings.each do |r|
+        result = {}
+        result[:id] = r.id
+        result[:place_id] = r.place_id
+        result[:score] = r.score
+        result[:comment] = r.comment
+        result[:user_name] = User.find_by(id: r.user_id).name
+        result[:user_avatar] = User.find_by(id: r.user_id).avatar
+
+        results << result
+      end
+      return render_success_response(:ok, RatingResFormat, {data: results}, "success")
     end
   end
 end
