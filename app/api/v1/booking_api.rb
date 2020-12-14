@@ -20,7 +20,7 @@ class BookingApi < ApiV1
       data[:status] = "pending"
       coupon = Coupon.find_by code_name: params[:coupon_code]
       data[:price] = Booking.charge params[:start_date], params[:end_date], place
-      data[:price] = data[:price] * (1 - coupon.discount / 100) if coupon&.useable?
+      data[:price] = data[:price] * (1 - coupon.discount / 100) if coupon
 
       booking = Booking.new data
 
