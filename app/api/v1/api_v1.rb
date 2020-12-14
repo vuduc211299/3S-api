@@ -8,4 +8,5 @@ class ApiV1 < Grape::API
   mount BookingApi
   mount PlaceApi
   mount BookmarkApi
+  mount CouponApi
 end
