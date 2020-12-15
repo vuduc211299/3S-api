@@ -33,9 +33,20 @@ class BookmarkApi < ApiV1
     desc "Get all bookmarked places by User"
 
     get do
+      results = []
+
       bookmarks = Favorite.where user_id: current_user.id
 
-      return render_success_response(:ok, BookmarkResFormat, {data: bookmarks}, I18n.t("messages.success.bookmark.get"))
+      bookmarks.each do |b|
+        result = {}
+        place = Place.find_by id: b.place_id
+        result[:place_name] = place.name
+        result[:place_image] = place.image
+        result[:place_price] = place.schedule_price.normal_day_price
+        result[:place_address] = place.address
+        results << result
+      end
+      return present({data: results}, nil, success: true, message: "success") if results
     end
 
     desc "Check place bookmarked"
