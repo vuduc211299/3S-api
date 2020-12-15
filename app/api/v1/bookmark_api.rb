@@ -38,6 +38,21 @@ class BookmarkApi < ApiV1
       return render_success_response(:ok, BookmarkResFormat, {data: bookmarks}, I18n.t("messages.success.bookmark.get"))
     end
 
+    desc "Check place bookmarked"
+
+    params do
+      requires :place_id, type: Integer
+    end
+
+    post "/check" do
+      bookmark = Favorite.where place_id: params[:place_id], user_id: current_user.id
+
+      return present({data: true}, nil, success: true, message: "bookmarked") if bookmark.length > 0
+
+      return present({data: false}, nil, success: true, message: "not bookmarked")
+      # return json: {data: false, message: "has not bookmarked yet"}
+    end
+
     desc "remove bookmark"
 
     delete "/remove" do
