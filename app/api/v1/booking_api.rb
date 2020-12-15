@@ -45,6 +45,8 @@ class BookingApi < ApiV1
       bookings.each do |b|
         result = {}
         place = Place.find_by id: b.place_id
+        result[:id] = b.id
+        result[:place_id] = b.place_id
         result[:place_name] = place.name
         result[:place_type] = place.place_type
         result[:num_of_guest] = b.num_of_people
