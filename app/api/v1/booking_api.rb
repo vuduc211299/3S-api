@@ -88,8 +88,7 @@ class BookingApi < ApiV1
 
         bookings.each do |b|
           result = {}
-          result[:id] = b[:id]
-          result[:place_id] = id
+          result[:id] = Place.find_by(id: b[:place_id]).id
           result[:start_date] = b[:start_date]
           result[:end_date] = b[:end_date]
           result[:num_of_people] = b[:num_of_people]
