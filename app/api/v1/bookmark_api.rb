@@ -40,6 +40,7 @@ class BookmarkApi < ApiV1
       bookmarks.each do |b|
         result = {}
         place = Place.find_by id: b.place_id
+        result[:place_id] = place.id
         result[:place_name] = place.name
         result[:place_image] = place.image
         result[:place_price] = place.schedule_price.normal_day_price
