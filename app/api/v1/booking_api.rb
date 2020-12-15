@@ -72,12 +72,22 @@ class BookingApi < ApiV1
       results = []
 
       place_id.each do |id|
-        booking = Booking.where(place_id: id)
+        bookings = Booking.where(place_id: id)
 
-        results.concat(booking)
+        bookings.each do |b|
+          result = {}
+          result[:id] = b[:id]
+          result[:start_date] = b[:start_date]
+          result[:end_date] = b[:end_date]
+          result[:num_of_people] = b[:num_of_people]
+          result[:price] = b[:price]
+          result[:user_id] = b[:user_id]
+          result[:place_name] = Place.find_by(id: b[:place_id]).name
+          results << result
+        end
       end
 
-      return render_success_response(:ok, BookingResFormat, {data: results}, "success") if results
+      return render_success_response(:ok, BookingHostFormat, results, "success") if results
 
       error!("error", :bad_request)
     end
