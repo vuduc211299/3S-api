@@ -41,10 +41,20 @@ class BookingApi < ApiV1
 
     get "/user/:id" do
       bookings = Booking.where user_id: params[:id]
+      results = []
+      bookings.each do |b|
+        result = {}
+        place = Place.find_by id: b.place_id
+        result[:place_name] = place.name
+        result[:place_type] = place.place_type
+        result[:num_of_guest] = b.num_of_people
+        result[:price] = b.price
+        result[:checkin] = b.start_date
+        result[:checkout] = b.end_date
+        results << result 
+      end
 
-      return render_success_response(:ok, BookingResFormat, {data: bookings}, "success") if bookings
-
-      error!(booking.errors.full_messages[0], :bad_request)
+      return present({data: results}, nil, success: true, message: "success") if results
     end
 
     desc "Get booking by place"
